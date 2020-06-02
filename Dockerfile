@@ -1,7 +1,7 @@
 FROM alpine:3.5
 MAINTAINER joseluisq - https://github.com/joseluisq
 
-ENV TZ "Europe/Berlin"
+ENV TZ "America/Argentina/Buenos_Aires"
 
 RUN apk update && \
     apk --no-cache add bash tzdata curl ca-certificates s6 ssmtp mysql-client \
@@ -13,8 +13,9 @@ RUN ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime && \
 RUN apk --no-cache add \
     php7 php7-phar php7-curl php7-fpm php7-json php7-zlib php7-gd \
     php7-xml php7-dom php7-ctype php7-opcache php7-zip php7-iconv \
-    php7-pdo php7-pdo_mysql php7-mysqli php7-mbstring php7-session \
-    php7-mcrypt php7-openssl php7-sockets php7-posix
+    php7-pdo php7-pdo_mysql php7-mysqli php7-pgsql php7-mbstring php7-session \
+    php7-mcrypt php7-openssl php7-sockets php7-posix \
+    php7-xml php7-intl php7-xmlrpc php7-soap php7-xmlreader
 
 RUN rm -rf /var/cache/apk/* && \
     ln -s /usr/bin/php7 /usr/bin/php && \
