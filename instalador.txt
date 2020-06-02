@@ -1,0 +1,29 @@
+-- postgres
+docker run -d --name lpostgres  -p 5432:5432 --restart=always -v /data/lpostgres/pgdata:/var/lib/postgresql/data -e POSTGRES_PASSWORD=Postgres912 postgres:10-alpine
+
+Ingresar al prompt de postgres y crear base de datos y usuario.
+
+Crear base
+=================================================================
+CREATE DATABASE moodle34 ENCODING 'UTF8' TEMPLATE template0;
+create user moodle;
+GRANT ALL PRIVILEGES ON DATABASE moodle34 to moodle;
+ALTER USER moodle WITH PASSWORD 'moodle911';
+\connect moodle34;
+GRANT ALL PRIVILEGES ON DATABASE moodle34 to moodle;
+GRANT CREATE,connect,temporary  on DATABASE moodle34 to moodle;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO moodle;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO moodle;
+
+
+Instalar Moodle: referencia  https://github.com/joseluisq/docker-alpine-nginx-php7
+
+docker build -t alpine-nginx-php7 .
+
+
+docker run --name lmoodle -p 80:80 --restart=always --link lpostgres:postgres -d \
+    -v ${PWD}/www:/var/www \
+    -v ${PWD}/moodledata:/var/moodledata \
+    alpine-nginx-php7
+
+docker run --rm -ti -p 9080:80 alpine-nginx-php7
